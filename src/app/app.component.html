@@ -1,0 +1,101 @@
+<div class="container" [hidden]="isHidden">
+  <div class="videocontainer">
+    <div>
+        <video #localVideo autoplay class="video"></video>
+    </div>
+
+    <div class="all-icons">
+      @if(!micEnabled){
+      <button (click)="enableMic()" class="icons">
+        <i class="bi bi-mic-mute-fill"></i>
+      </button>
+      }@else{
+      <button (click)="disableMic()" class="icons">
+        <i class="bi bi-mic-fill"></i>
+      </button>
+      } @if(!camEnabled){
+      <button (click)="toggleWebcam()" class="icons">
+        <i class="bi bi-camera-video-off-fill"></i>
+      </button>
+      }@else{
+      <button (click)="toggleWebcam()" class="icons">
+        <i class="bi bi-camera-video-fill"></i>
+      </button>
+      }
+    </div>
+  </div>
+
+  <div class="meetingContainer">
+    <div>
+      <label for="name" style="font-size: 18px; display: block;">Name</label>
+      <input
+        type="text"
+        class="input"
+        [(ngModel)]="name"
+        (ngModelChange)="onchangeName()"
+      />
+    </div>
+    <div>
+      <p style="font-size: 18px">Join Meeting</p>
+      <button
+        type="button"
+        class="btn btn-primary custom-width-button"
+        btn-custom
+        (click)="join()"
+      >
+        Join
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="main-container" [hidden]="!isHidden">
+  <div
+    class="main-video-container"
+    [ngClass]="{ 'single-video': participants.length === 1 }"
+  >
+    @for(participant of participants ; track participant.id ; let i = $index){
+    <div class="video-box" [id]="participant.id">
+      @if(participant?.mediaStream?.active){
+      <video
+        #remoteVideo
+        autoplay
+        class="Participants-video"
+        [srcObject]="participant.mediaStream"
+      ></video>
+      }@else{
+      <div class="character-circle">
+        {{ participant.displayName.charAt(0) }}
+      </div>
+      }
+      <audio
+        #remoteAudio
+        [controls]="false"
+        autoplay
+        [srcObject]="participant.audioStream"
+      ></audio>
+    </div>
+    }
+  </div>
+
+  <div class="all-video-icons">
+    @if(!micEnabled){
+    <button (click)="enableMic()" class="icons">
+      <i class="bi bi-mic-mute-fill"></i>
+    </button>
+    }@else{
+    <button (click)="disableMic()" class="icons">
+      <i class="bi bi-mic-fill"></i>
+    </button>
+    } @if(!camEnabled){
+    <button (click)="enableCam()" class="icons">
+      <i class="bi bi-camera-video-off-fill"></i>
+    </button>
+    }@else{
+    <button (click)="disableCam()" class="icons">
+      <i class="bi bi-camera-video-fill"></i>
+    </button>
+    }
+    <button (click)="leave()">Leave</button>
+  </div>
+</div>
