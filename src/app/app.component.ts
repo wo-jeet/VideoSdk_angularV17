@@ -1,5 +1,4 @@
 import {
-  ChangeDetectorRef,
   Component,
   ElementRef,
   ViewChild,
@@ -10,7 +9,6 @@ import { environment } from '../environment/environment';
 import { MatIconModule } from '@angular/material/icon';
 import { NgClass } from '@angular/common';
 import { FormsModule, NgModel } from '@angular/forms';
-import e from 'express';
 
 @Component({
   selector: 'app-root',
@@ -25,6 +23,7 @@ export class AppComponent {
   @ViewChild('remoteAudio') remoteAudio: ElementRef;
   title = 'videosdkDemo';
   meeting: any;
+  isCamera: boolean = false;
   isHidden: boolean = false;
   micEnabled: boolean = false;
   camEnabled: boolean = false;
@@ -35,7 +34,7 @@ export class AppComponent {
 
 
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor() {}
 
 
   
@@ -57,7 +56,6 @@ export class AppComponent {
     this.registerParticipantEvents();
   }
   join() {
-    console.log('getting joining event ', this.meeting);
     this.isHidden = true;
     
     if (this.webcamStream) {
@@ -68,19 +66,17 @@ export class AppComponent {
   }
 
   leave() {
-    console.log('leave', this.meeting.localParticipant.id);
     this.meeting.leave();
     this.participants = this.participants.filter(
       (obj) => obj.id !== this.meeting.localParticipant.id
     );
-    console.log("after leaving",this.participants)
     this.isHidden = false;
-
   }
 
   toggleWebcam() {
     if (this.webcamStream) {
       // Disable webcam
+      this.isCamera = true
       this.webcamStream.getTracks().forEach(track => track.stop());
       this.localVideo.nativeElement.srcObject = null;
       this.webcamStream = null;
@@ -89,6 +85,7 @@ export class AppComponent {
 
     } else {
       // Enable webcam
+      this.isCamera = false
       navigator.mediaDevices.getUserMedia({ video: true}).then(mediaStream => {
         this.localVideo.nativeElement.srcObject = mediaStream;
         this.webcamStream = mediaStream;
@@ -103,7 +100,6 @@ export class AppComponent {
 
   registerParticipantEvents() {
     this.meeting.on('meeting-joined', () => {
-      console.log('meeting', this.meeting);
       this.participants.push(this.meeting.localParticipant);
       this.meeting.localParticipant.on('stream-enabled', (stream: any) => {
         if (stream.kind == 'video')
@@ -113,7 +109,6 @@ export class AppComponent {
             this.localVideo
           );
       });
-      this.cdr.detectChanges()
     });
 
     this.meeting.on('participant-joined', (participant: any) => {
@@ -124,7 +119,6 @@ export class AppComponent {
         if (stream.kind == 'video')
           this.createVideoElement(stream, participant, this.remoteVideo);
       });
-      this.cdr.detectChanges()
 
     });
 
@@ -132,6 +126,10 @@ export class AppComponent {
       this.participants = this.participants.filter(
         (obj) => obj.id !== participant.id
       );
+    })
+
+    this.meeting.on('meeting-left', ()=>{
+      this.participants = [];
     })
 
     this.meeting.on('error', (data) => {
@@ -144,7 +142,6 @@ export class AppComponent {
     if (participant.id == this.meeting.localParticipant.id) return;
     const mediaStream = new MediaStream();
     mediaStream.addTrack(stream.track);
-    this;
     const result = this.participants.findIndex(
       (obj) => obj.id === participant.id
     );
@@ -159,7 +156,6 @@ export class AppComponent {
   }
 
   createVideoElement(stream: any, participant: any, remoteVideo: ElementRef) {
-    console.log('stream', stream);
     const mediaStream = new MediaStream();
     mediaStream.addTrack(stream.track);
     const result = this.participants.findIndex(
@@ -174,7 +170,6 @@ export class AppComponent {
       participant.mediaStream = mediaStream;
       this.participants.push(participant);
     }
-    console.log('participants', this.participants);
   }
 
   ngOnInit() {
@@ -188,14 +183,11 @@ export class AppComponent {
   enableMic() {
     this.meeting.unmuteMic();
     this.micEnabled = true;
-    console.log("enable", this.meeting)
   }
 
   disableMic() {
     this.meeting.muteMic();
     this.micEnabled = false;
-    console.log("disable")
-
   }
 
   enableCam() {

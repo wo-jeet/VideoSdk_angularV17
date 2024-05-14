@@ -1,8 +1,8 @@
 <div class="container" [hidden]="isHidden">
   <div class="videocontainer">
-    <div>
+      <div>
         <video #localVideo autoplay class="video"></video>
-    </div>
+      </div>
 
     <div class="all-icons">
       @if(!micEnabled){
@@ -11,7 +11,7 @@
       </button>
       }@else{
       <button (click)="disableMic()" class="icons">
-        <i class="bi bi-mic-fill"></i>
+        <i class="bi bi-mic"></i>
       </button>
       } @if(!camEnabled){
       <button (click)="toggleWebcam()" class="icons">
@@ -19,7 +19,7 @@
       </button>
       }@else{
       <button (click)="toggleWebcam()" class="icons">
-        <i class="bi bi-camera-video-fill"></i>
+        <i class="bi bi-camera-video"></i>
       </button>
       }
     </div>
@@ -27,7 +27,7 @@
 
   <div class="meetingContainer">
     <div>
-      <label for="name" style="font-size: 18px; display: block;">Name</label>
+      <label for="name" style="font-size: 18px; display: block">Name</label>
       <input
         type="text"
         class="input"
@@ -96,6 +96,8 @@
       <i class="bi bi-camera-video-fill"></i>
     </button>
     }
-    <button (click)="leave()">Leave</button>
+    <button (click)="leave()" class="icons bg-danger">
+      <i class="bi bi-telephone-fill"></i>
+    </button>
   </div>
 </div>
