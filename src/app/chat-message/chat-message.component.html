@@ -1,0 +1,19 @@
+<div [ngClass]="{'align-right': isLocalParticipant}" class="chat-message">
+    <div class="senderDetail" [style.justify-content]="isLocalParticipant ? 'flex-end' : 'normal'">
+        <div class="element">
+          <span class="font-size-12">{{ message.senderName }}</span>
+        </div>
+        <div class="element">
+          <span class="font-size-12">
+            {{ message.timestamp | date : "hh:mm a" }}
+          </span>
+        </div>
+    </div>
+      
+  <div
+    [ngStyle]="{'background-color': isLocalParticipant ? 'grey' : 'crimson'}"
+    class="message"
+  >
+    {{ message.message }}
+  </div>
+</div>

@@ -2,6 +2,7 @@
   <div class="videocontainer">
       <div>
         <video #localVideo autoplay class="video"></video>
+        <div style="color: white; font-size: 30px; margin: auto;position: absolute;top: 50%; left: 50%; transform: translate(-50%,-50%);" [hidden]="isCamera">Camera is off</div>
       </div>
 
     <div class="all-icons">
@@ -50,54 +51,96 @@
 </div>
 
 <div class="main-container" [hidden]="!isHidden">
-  <div
-    class="main-video-container"
-    [ngClass]="{ 'single-video': participants.length === 1 }"
-  >
-    @for(participant of participants ; track participant.id ; let i = $index){
-    <div class="video-box" [id]="participant.id">
-      @if(participant?.mediaStream?.active){
-      <video
-        #remoteVideo
-        autoplay
-        class="Participants-video"
-        [srcObject]="participant.mediaStream"
-      ></video>
-      }@else{
-      <div class="character-circle">
-        {{ participant.displayName.charAt(0) }}
+  <div class="video-section">
+    <div
+      class="main-video-container"
+      [ngClass]="{ 'single-video': participants.length === 1 }"
+    >
+      @for(participant of participants ; track participant.id ; let i = $index){
+      @if(i < 7){
+
+      <div class="video-box" [id]="participant.id">
+        @if(participant?.mediaStream?.active){
+        <video
+          #remoteVideo
+          autoplay
+          class="Participants-video"
+          [srcObject]="participant.mediaStream"
+        ></video>
+        }@else{
+        <div class="character-circle">
+          {{ participant.displayName.charAt(0) }}
+        </div>
+        }
+        <audio
+          #remoteAudio
+          [controls]="false"
+          autoplay
+          [srcObject]="participant.audioStream"
+        ></audio>
       </div>
-      }
-      <audio
-        #remoteAudio
-        [controls]="false"
-        autoplay
-        [srcObject]="participant.audioStream"
-      ></audio>
+      } @else if(i === 7){
+      <div class="video-box" [id]="participant.id">
+        <div class="character-circle">
+          +{{ participants.length - 7 }}
+        </div>
+      </div>
+      } }
     </div>
-    }
+
+    <div class="all-video-icons">
+      @if(!micEnabled){
+      <button (click)="enableMic()" class="icons">
+        <i class="bi bi-mic-mute-fill"></i>
+      </button>
+      }@else{
+      <button (click)="disableMic()" class="icons">
+        <i class="bi bi-mic-fill"></i>
+      </button>
+      } @if(!camEnabled){
+      <button (click)="enableCam()" class="icons">
+        <i class="bi bi-camera-video-off-fill"></i>
+      </button>
+      }@else{
+      <button (click)="disableCam()" class="icons">
+        <i class="bi bi-camera-video-fill"></i>
+      </button>
+      }
+      <button (click)="leave()" class="icons bg-danger">
+        <i class="bi bi-telephone-fill"></i>
+      </button>
+      <button (click)="chat()" class="icons">
+        <i class="bi bi-chat-right-text-fill"></i>
+      </button>
+      <button (click)="raise()" class="icons">
+        <i class="bi bi-hand-index-thumb-fill"></i>
+      </button>
+    </div>
   </div>
 
-  <div class="all-video-icons">
-    @if(!micEnabled){
-    <button (click)="enableMic()" class="icons">
-      <i class="bi bi-mic-mute-fill"></i>
-    </button>
-    }@else{
-    <button (click)="disableMic()" class="icons">
-      <i class="bi bi-mic-fill"></i>
-    </button>
-    } @if(!camEnabled){
-    <button (click)="enableCam()" class="icons">
-      <i class="bi bi-camera-video-off-fill"></i>
-    </button>
-    }@else{
-    <button (click)="disableCam()" class="icons">
-      <i class="bi bi-camera-video-fill"></i>
-    </button>
-    }
-    <button (click)="leave()" class="icons bg-danger">
-      <i class="bi bi-telephone-fill"></i>
-    </button>
+  <div [hidden]="isChatVisible" class="chat">
+    <div class="chatArea" #chatArea>
+      <div #chatContainer></div>
+    </div>
+    <div class="input-group inputText">
+      <input
+        type="text"
+        class="form-control ml-3"
+        placeholder="Send message"
+        aria-label="Recipient's username"
+        aria-describedby="button-addon2"
+        [(ngModel)]="sendTextMessage"
+      />
+      <button
+        class="btn btn-outline-secondary"
+        type="button"
+        id="button-addon2"
+        (click)="sendMessage()"
+      >
+        <i class="bi bi-send-fill"></i>
+      </button>
+    </div>
   </div>
+
+  
 </div>

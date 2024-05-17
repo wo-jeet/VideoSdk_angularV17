@@ -1,0 +1,35 @@
+.align-right{
+   text-align: right;
+   justify-content: end;
+}
+
+.chat-message {
+  word-wrap: break-word;
+  word-break: break-all;
+  margin-top: 12px;
+}
+
+.row {
+  margin-right: 0;
+}
+
+.senderDetail{
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  justify-content: end;
+}
+
+.element{
+  display: inline-block;
+}
+
+.message{
+  margin-top: 5px;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 8px;
+  display: inline-block;
+  text-align: start;
+  width: 85%;
+}

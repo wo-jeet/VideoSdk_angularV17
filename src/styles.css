@@ -1,1 +1,18 @@
-/* You can add global styles to this file, and also import other style files */
+
+#toast-container .ngx-toastr.toast-info {
+    background-color: #ced4da !important; 
+    color: black !important; 
+    background-image: url('./assets/raised-hand.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: 0px center;
+    padding: 10px 20px 10px 50px;
+}
+.toast-close-button {
+    color: black;
+}
+
+.toast-top-right{
+    top: 25px;
+    right: 50px;
+}
