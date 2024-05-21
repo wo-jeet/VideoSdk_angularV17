@@ -1,9 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ToastrService, IndividualConfig } from 'ngx-toastr';
-
-interface ToastrOptions extends Partial<IndividualConfig<any>> {
-  iconClass?: string;
-}
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'

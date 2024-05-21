@@ -1,7 +1,7 @@
 <div [ngClass]="{'align-right': isLocalParticipant}" class="chat-message">
     <div class="senderDetail" [style.justify-content]="isLocalParticipant ? 'flex-end' : 'normal'">
         <div class="element">
-          <span class="font-size-12">{{ message.senderName }}</span>
+          <span class="font-size-12"> {{ isLocalParticipant ? 'You' : message.senderName }}</span>
         </div>
         <div class="element">
           <span class="font-size-12">
@@ -11,7 +11,7 @@
     </div>
       
   <div
-    [ngStyle]="{'background-color': isLocalParticipant ? 'grey' : 'crimson'}"
+    [ngStyle]="{'background-color': isLocalParticipant ? '#ddd' : '#ddd'}"
     class="message"
   >
     {{ message.message }}

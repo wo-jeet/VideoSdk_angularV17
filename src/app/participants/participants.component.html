@@ -1,0 +1,13 @@
+<div class="participants">
+  <h4 class="mb-3 mt-2">List of Participants</h4>
+  @for(participant of participants ; track participant.id){
+  <div class="participant">
+    <div
+      class="avatar"
+    >
+      {{ participant.displayName.charAt(0).toUpperCase() }}
+    </div>
+    <div>{{ participant.displayName }}</div>
+  </div>
+  }
+</div>

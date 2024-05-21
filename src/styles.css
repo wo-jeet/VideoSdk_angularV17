@@ -1,12 +1,12 @@
 
 #toast-container .ngx-toastr.toast-info {
-    background-color: #ced4da !important; 
+    background-color: #ffc078 !important; 
     color: black !important; 
     background-image: url('./assets/raised-hand.svg');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: 0px center;
-    padding: 10px 20px 10px 50px;
+    padding: 10px 20px 10px 60px;
 }
 .toast-close-button {
     color: black;

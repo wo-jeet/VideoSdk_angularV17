@@ -10,15 +10,10 @@ import { CommonModule } from '@angular/common';
   templateUrl: './chat-message.component.html',
   styleUrl: './chat-message.component.css',
 })
-export class ChatMessageComponent implements OnChanges{
+export class ChatMessageComponent {
   @Input() message: any;
   @Input() isLocalParticipant: boolean;
 
-  constructor(){
-    // console.log("-->",this.isLocalParticipant)
-  }
-  ngOnChanges(changes: SimpleChanges): void {
-     console.log("-->",changes)
-  }
+  constructor(){}
 
 }

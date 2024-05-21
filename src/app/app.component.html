@@ -1,5 +1,5 @@
 <div class="container" [hidden]="isHidden">
-  <div class="videocontainer">
+  <div class="video-container">
       <div>
         <video #localVideo autoplay class="video"></video>
         <div style="color: white; font-size: 30px; margin: auto;position: absolute;top: 50%; left: 50%; transform: translate(-50%,-50%);" [hidden]="isCamera">Camera is off</div>
@@ -26,22 +26,29 @@
     </div>
   </div>
 
-  <div class="meetingContainer">
-    <div>
+  <div class="meeting-container">
+    <div class="form-group">
       <label for="name" style="font-size: 18px; display: block">Name</label>
       <input
         type="text"
         class="input"
+        placeholder="Enter name"
         [(ngModel)]="name"
-        (ngModelChange)="onchangeName()"
       />
     </div>
-    <div>
-      <p style="font-size: 18px">Join Meeting</p>
+    <div class="form-group">
+      <label for="name" style="font-size: 18px; display: block">Meeting Id</label>
+      <input
+        type="text"
+        class="input"
+        placeholder="Enter Meeting Id"
+        [(ngModel)]="meetingId"
+      />
+    </div>
+    <div class="form-group">
       <button
         type="button"
-        class="btn btn-primary custom-width-button"
-        btn-custom
+        class="btn btn-primary custom-width-button form-button"
         (click)="join()"
       >
         Join
@@ -107,7 +114,7 @@
       </button>
       }
       <button (click)="leave()" class="icons bg-danger">
-        <i class="bi bi-telephone-fill"></i>
+        <i class="bi bi-telephone-fill rotate-135"></i>
       </button>
       <button (click)="chat()" class="icons">
         <i class="bi bi-chat-right-text-fill"></i>
@@ -115,24 +122,27 @@
       <button (click)="raise()" class="icons">
         <i class="bi bi-hand-index-thumb-fill"></i>
       </button>
+      <button (click)="showParticipants()" class="icons">
+        <i class="bi bi-people-fill"></i>  
+      </button>
     </div>
   </div>
 
-  <div [hidden]="isChatVisible" class="chat">
+  <div [hidden]="isChatVisible" class="section">
     <div class="chatArea" #chatArea>
       <div #chatContainer></div>
     </div>
-    <div class="input-group inputText">
+    <div class="input-div">
       <input
         type="text"
-        class="form-control ml-3"
+        class="form-control ml-3 input-text"
         placeholder="Send message"
         aria-label="Recipient's username"
         aria-describedby="button-addon2"
         [(ngModel)]="sendTextMessage"
       />
       <button
-        class="btn btn-outline-secondary"
+        class="btn button-position"
         type="button"
         id="button-addon2"
         (click)="sendMessage()"
@@ -141,6 +151,9 @@
       </button>
     </div>
   </div>
-
+  
+  <div [hidden]="isParticipantsVisible" class="section">
+    <app-participants [participants] = participants></app-participants>
+  </div>
   
 </div>
