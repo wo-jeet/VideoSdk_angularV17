@@ -6,5 +6,4 @@ export const environment = {
       token: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlrZXkiOiIwMThlMWQ4Mi03N2Y5LTQ0MGEtOGNhMC0xNWY0YTcyNzAxNjkiLCJwZXJtaXNzaW9ucyI6WyJhbGxvd19qb2luIl0sImlhdCI6MTcxNTIzODI0MywiZXhwIjoxODczMDI2MjQzfQ.QbFoCROXzWUN44ZKa-iuNT91f0Tcnxc9ih8wDZnruLA',
       meetingId: 'cyb6-q679-22c6'
     }
-  
   };

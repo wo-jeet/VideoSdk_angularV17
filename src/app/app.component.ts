@@ -8,10 +8,16 @@ import {
 import { RouterOutlet } from "@angular/router";
 import { VideoSDK } from "@videosdk.live/js-sdk";
 import { NgClass } from "@angular/common";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NotifierService } from "./services/notifier.service";
 import { ChatMessageComponent } from "./chat-message/chat-message.component";
 import { ParticipantsComponent } from "./participants/participants.component";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
 
 @Component({
   selector: "app-root",
@@ -21,7 +27,8 @@ import { ParticipantsComponent } from "./participants/participants.component";
     NgClass,
     FormsModule,
     ChatMessageComponent,
-    ParticipantsComponent
+    ParticipantsComponent,
+    ReactiveFormsModule,
   ],
   templateUrl: "./app.component.html",
   styleUrl: "./app.component.css",
@@ -33,11 +40,10 @@ export class AppComponent {
   @ViewChild("chatContainer", { read: ViewContainerRef })
   chatContainer: ViewContainerRef;
 
-
   title = "videosdkDemo";
   meeting: any;
   isCamera: boolean = false;
-  isHidden: boolean = false;
+  isDetailSectionHidden: boolean = false;
   micEnabled: boolean = false;
   camEnabled: boolean = false;
   participants: any[] = [];
@@ -49,22 +55,32 @@ export class AppComponent {
   alertString: string;
   meetingId: string;
   isParticipantsVisible: boolean = true;
+  form: FormGroup;
 
   constructor(
     private toasterService: NotifierService,
-    private componentFactoryResolver: ComponentFactoryResolver
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private formBuilder: FormBuilder
   ) {
     this.raiseHand = this.raiseHand.bind(this);
   }
 
+  ngOnInit(): void {
+    this.form = this.formBuilder.group({
+      name: ["", Validators.required],
+      meetingId: ["", [Validators.required]],
+    });
+  }
+
   async initMeeting() {
+    const { name, meetingId } = this.form.value;
     VideoSDK.config(
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlrZXkiOiIwMThlMWQ4Mi03N2Y5LTQ0MGEtOGNhMC0xNWY0YTcyNzAxNjkiLCJwZXJtaXNzaW9ucyI6WyJhbGxvd19qb2luIl0sImlhdCI6MTcxNTIzODI0MywiZXhwIjoxODczMDI2MjQzfQ.QbFoCROXzWUN44ZKa-iuNT91f0Tcnxc9ih8wDZnruLA"
     );
 
     this.meeting = VideoSDK.initMeeting({
-      meetingId: this.meetingId,
-      name: this.name,
+      meetingId: meetingId,
+      name: name,
       micEnabled: this.micEnabled,
       webcamEnabled: this.isCamera,
       maxResolution: "hd",
@@ -112,16 +128,17 @@ export class AppComponent {
       });
 
       this.chatEventListener = async (data: any) => {
-        let {senderId} = data;
+        let { senderId } = data;
         const componentFactory =
           this.componentFactoryResolver.resolveComponentFactory(
             ChatMessageComponent
           );
 
-        const componentRef = this.chatContainer.createComponent(componentFactory);
+        const componentRef =
+          this.chatContainer.createComponent(componentFactory);
         componentRef.instance.message = data;
-        componentRef.instance.isLocalParticipant = this.meeting.localParticipant.id == senderId
-    
+        componentRef.instance.isLocalParticipant =
+          this.meeting.localParticipant.id == senderId;
       };
       await this.meeting.pubSub.subscribe("CHAT", this.chatEventListener);
       await this.meeting?.pubSub?.subscribe("RAISE_HAND", this.raiseHand);
@@ -146,7 +163,7 @@ export class AppComponent {
     this.meeting.on("meeting-left", async () => {
       this.participants = [];
 
-      this.chatContainer.clear()
+      this.chatContainer.clear();
 
       if (this.chatEventListener) {
         this.meeting.pubSub.unsubscribe("CHAT", this.chatEventListener);
@@ -192,13 +209,15 @@ export class AppComponent {
     }
   }
 
-  join() {  
-    if(this.name && this.meetingId){
+  join() {
+    if (this.form.valid) {
       this.initMeeting();
-      this.isHidden = true;
-      this.webcamStream ? this.meeting.join({ localStream: this.webcamStream }) : this.meeting.join();
-    }else{
-      this.isHidden = false;
+      this.isDetailSectionHidden = true;
+      this.webcamStream
+        ? this.meeting.join({ localStream: this.webcamStream })
+        : this.meeting.join();
+    } else {
+      this.isDetailSectionHidden = false;
     }
   }
 
@@ -212,7 +231,7 @@ export class AppComponent {
     this.participants = this.participants.filter(
       (obj) => obj.id !== this.meeting.localParticipant.id
     );
-    this.isHidden = false;
+    this.isDetailSectionHidden = false;
   }
 
   enableMic() {
@@ -249,7 +268,7 @@ export class AppComponent {
     await this.meeting?.pubSub.publish("RAISE_HAND", "Raise Hand");
   }
 
-  showParticipants(){
+  showParticipants() {
     this.isChatVisible = true;
     this.isParticipantsVisible = !this.isParticipantsVisible;
   }

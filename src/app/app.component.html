@@ -1,9 +1,22 @@
-<div class="container" [hidden]="isHidden">
+<div class="container" [hidden]="isDetailSectionHidden">
   <div class="video-container">
-      <div>
-        <video #localVideo autoplay class="video"></video>
-        <div style="color: white; font-size: 30px; margin: auto;position: absolute;top: 50%; left: 50%; transform: translate(-50%,-50%);" [hidden]="isCamera">Camera is off</div>
+    <div>
+      <video #localVideo autoplay class="video"></video>
+      <div
+        style="
+          color: white;
+          font-size: 30px;
+          margin: auto;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        "
+        [hidden]="isCamera"
+      >
+        Camera is off
       </div>
+    </div>
 
     <div class="all-icons">
       @if(!micEnabled){
@@ -26,38 +39,51 @@
     </div>
   </div>
 
-  <div class="meeting-container">
-    <div class="form-group">
-      <label for="name" style="font-size: 18px; display: block">Name</label>
-      <input
-        type="text"
-        class="input"
-        placeholder="Enter name"
-        [(ngModel)]="name"
-      />
+    <div [formGroup]="form">
+      <div class="form-group mb-4">
+        <label for="name" class="form-label">Name</label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Enter name"
+          formControlName="name"
+        />
+        @if(form.controls['name'].touched && form.controls['name'].invalid){
+          <div class="error-message">
+            Name is required.
+          </div>
+        }
+      </div>
+      
+      <div class="form-group mb-4">
+        <label for="meetingId" class="form-label">Meeting ID</label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Enter Meeting ID"
+          formControlName="meetingId"
+        />
+        @if(form.controls['meetingId'].touched && form.controls['meetingId'].invalid){
+          <div class="error-message">
+            Meeting Id is required.
+          </div>
+        }
+      </div>
+    
+      <div class="form-group">
+        <button
+          type="submit"
+          class="btn btn-primary custom-width-button form-button"
+          (click)="join()"
+          [disabled]="form.invalid"
+        >
+          Join
+        </button>
+      </div>
     </div>
-    <div class="form-group">
-      <label for="name" style="font-size: 18px; display: block">Meeting Id</label>
-      <input
-        type="text"
-        class="input"
-        placeholder="Enter Meeting Id"
-        [(ngModel)]="meetingId"
-      />
-    </div>
-    <div class="form-group">
-      <button
-        type="button"
-        class="btn btn-primary custom-width-button form-button"
-        (click)="join()"
-      >
-        Join
-      </button>
-    </div>
-  </div>
 </div>
 
-<div class="main-container" [hidden]="!isHidden">
+<div class="main-container" [hidden]="!isDetailSectionHidden">
   <div class="video-section">
     <div
       class="main-video-container"
@@ -88,9 +114,7 @@
       </div>
       } @else if(i === 7){
       <div class="video-box" [id]="participant.id">
-        <div class="character-circle">
-          +{{ participants.length - 7 }}
-        </div>
+        <div class="character-circle">+{{ participants.length - 7 }}</div>
       </div>
       } }
     </div>
@@ -123,7 +147,7 @@
         <i class="bi bi-hand-index-thumb-fill"></i>
       </button>
       <button (click)="showParticipants()" class="icons">
-        <i class="bi bi-people-fill"></i>  
+        <i class="bi bi-people-fill"></i>
       </button>
     </div>
   </div>
@@ -151,9 +175,8 @@
       </button>
     </div>
   </div>
-  
+
   <div [hidden]="isParticipantsVisible" class="section">
-    <app-participants [participants] = participants></app-participants>
+    <app-participants [participants]="participants"></app-participants>
   </div>
-  
 </div>
