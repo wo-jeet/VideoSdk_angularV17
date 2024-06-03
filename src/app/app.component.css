@@ -17,7 +17,6 @@
 
 .video-container{
     position: relative;
-    /* display: flex; */
     flex-direction: column;
     background-color: black;
     border-radius: 12px;
@@ -38,7 +37,7 @@
 
 .button-position{
    position: absolute;
-   left: 354px;
+   left: 365px;
    transform: rotate(45deg);
    z-index: 10;
    border: none;
@@ -48,15 +47,15 @@
   display: block;
   width: 100%;
 }
-
+  
 .icons{
    height: 50px;
    width: 50px;
    border-radius: 50%;
    background-color: #495057;
    background-color: transparent;
-   color: white;  
-   border: 2px solid white;
+   color: #fff;  
+   border: 2px solid #fff;
    padding: 0px;
 }
 
@@ -67,20 +66,28 @@
     border-radius: 12px;
 }
 
-.main-container {
+.upper-section {
     display: flex;
     flex-direction: row; 
     background-color: black;
-    box-sizing: border-box;
-    margin: auto;
-    height: 100vh;
+    box-sizing: border-box; 
+    height: 90%;
+    flex: 1;
   }
+
+.main-container{
+   display: flex;
+   flex-direction: column;
+   background-color: black;
+   height: 100vh;
+}
 
 .main-video-container{ 
     display: grid;
     grid-template-columns: repeat(auto-fit , minmax(400px,1fr)); 
     grid-template-rows: repeat(auto-fit , minmax(100px,1fr)); 
     gap: 20px; 
+    padding: 16px 0px 12px 0px;
     overflow: hidden; 
     box-sizing: border-box;
     height: 100%;
@@ -90,7 +97,6 @@
 .video-box {
     background-color: #495057;
     border-radius: 12px;
-    margin-top: 16px; 
     box-sizing: border-box;   
     overflow: hidden;
     position: relative;
@@ -99,10 +105,9 @@
 .single-video .video-box {
     background-color: #495057;
     border-radius: 12px;
-    width: 96%;
+    width: 100%;
     margin: auto;
-    margin-top: 16px;
-    height: 96%;
+    height: 100%;
     gap: 0px;
     position: relative;
   }
@@ -119,7 +124,7 @@
     justify-content: center;
     align-items: center;
     gap: 10px;
-    margin: 12px auto 26px auto;
+    margin: 20px auto 26px auto;
 }
 
 .bi-telephone-fill::before{
@@ -146,14 +151,12 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  width: -webkit-fill-available;
+  width: 100%;
 }
 
 .section {
-  background-color: white;
+  background-color: #fff;
   border-radius: 12px;
-  margin: 16px 12px 12px 12px;
-  width: 30%;
   display: flex;
   flex-direction: column;
 }
@@ -166,7 +169,7 @@
 
 .input-div{
   padding: 20px;
-  margin: 12px auto 25px auto;
+  margin: 12px auto 12px auto;
   position: relative;
   display: flex;
   flex-wrap: wrap;
@@ -185,8 +188,24 @@
   margin-right: 10px;
 }
 .error-message {
-  color: red;
+  color: #ff0000;
   font-size: 14px;
   margin-top: 5px;
   margin-left: 2px;
 }
+
+.chat , .participant{
+  width: 0;
+  opacity: 0;
+  margin: 16px 12px 12px 12px;
+  transition: width 0.5s ease, opacity 0.5s ease, margin 0.5s ease;
+  overflow: hidden;
+  margin: 0px;
+}
+
+.chat.visible , .participant.visible {
+  width: 30%;
+  opacity: 1;
+  margin: 16px 12px 12px 12px;
+}
+

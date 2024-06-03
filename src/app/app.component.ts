@@ -49,12 +49,12 @@ export class AppComponent {
   participants: any[] = [];
   name: string = "";
   webcamStream: MediaStream | null = null;
-  isChatVisible: boolean = true;
+  isChatVisible: boolean = false;
   sendTextMessage: string = "";
   chatEventListener: Function | undefined;
   alertString: string;
   meetingId: string;
-  isParticipantsVisible: boolean = true;
+  isParticipantsVisible: boolean = false;
   form: FormGroup;
 
   constructor(
@@ -109,7 +109,7 @@ export class AppComponent {
         })
         .catch((error) => {
           this.isCamera = false;
-          console.log("error",error)
+          console.log("error", error);
           console.error("Error accessing camera and microphone:", error);
         });
     }
@@ -226,12 +226,15 @@ export class AppComponent {
     this.meeting = null;
     this.camEnabled = false;
     this.isCamera = false;
+    this.isChatVisible = false;
+    this.isParticipantsVisible = false;
     this.localVideo.nativeElement.srcObject = null;
     this.webcamStream = null;
     this.participants = this.participants.filter(
       (obj) => obj.id !== this.meeting.localParticipant.id
     );
     this.isDetailSectionHidden = false;
+    this.toasterService.clear();
   }
 
   enableMic() {
@@ -260,8 +263,8 @@ export class AppComponent {
     this.isCamera = false;
   }
   chat() {
+    this.isParticipantsVisible = false;
     this.isChatVisible = !this.isChatVisible;
-    this.isParticipantsVisible = true;
   }
 
   async raise() {
@@ -269,7 +272,7 @@ export class AppComponent {
   }
 
   showParticipants() {
-    this.isChatVisible = true;
+    this.isChatVisible = false;
     this.isParticipantsVisible = !this.isParticipantsVisible;
   }
 
